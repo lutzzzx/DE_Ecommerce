@@ -1,0 +1,43 @@
+name: CI - Lint & Unit Test
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ingestion/requirements.txt
+          pip install pytest flake8 pyspark==3.5.1 apache-airflow==2.9.3
+
+      - name: Lint with Flake8
+        run: |
+          # Stop the build if there are syntax errors or undefined names
+          flake8 ingestion/ spark_jobs/ airflow/dags/ tests/ --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Warning level checks
+          flake8 ingestion/ spark_jobs/ airflow/dags/ tests/ --count --exit-zero --max-line-length=120 --extend-ignore=E203,E402,W503 --statistics
+
+      - name: Run Unit & DAG Integrity Tests
+        env:
+          PYTHONPATH: ingestion:.
+        run: |
+          pytest tests/ -v
+
+      - name: Run PySpark Transformation Tests
+        run: |
+          pytest spark_jobs/tests/ -v

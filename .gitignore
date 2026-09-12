@@ -1,0 +1,53 @@
+# Environment variables & secrets (CRITICAL: Never commit .env)
+.env
+*.env.local
+
+# Python virtual environment
+.venv/
+venv/
+env/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# Python Bytecode & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Pytest & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Raw data files (Do not commit large datasets to Git)
+data/raw/olist/*.csv
+data/raw/*.csv
+*.csv
+
+# Great Expectations local output
+great_expectations/uncommitted/validations/
+great_expectations/uncommitted/data_docs/
+
+# dbt artifacts
+dbt/ecommerce_dwh/target/
+dbt/ecommerce_dwh/dbt_packages/
+dbt/ecommerce_dwh/logs/
+
+# Airflow runtime logs
+airflow/logs/
+
+# Local databases & Docker storage
+*.db
+*.sqlite3
+metabase-data/
+
+# OS specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE & Editor configs
+.vscode/
+.idea/

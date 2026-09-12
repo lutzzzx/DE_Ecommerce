@@ -1,0 +1,18 @@
+groups:
+  - name: data_platform_alerts
+    rules:
+      - alert: HighKafkaConsumerLag
+        expr: kafka_consumergroup_lag{topic="ecommerce.events"} > 50000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Kafka consumer lag tinggi ({{ $value }} pesan) — Spark Streaming mungkin lambat."
+
+      - alert: WarehouseNoActiveConnections
+        expr: pg_stat_activity_count{datname="warehouse"} == 0
+        for: 10m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Tidak ada koneksi aktif ke warehouse selama 10 menit — periksa status pipeline."

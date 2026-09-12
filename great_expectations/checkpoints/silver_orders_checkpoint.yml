@@ -1,0 +1,20 @@
+name: silver_orders_checkpoint
+config_version: 1.0
+class_name: Checkpoint
+validations:
+  - batch_request:
+      datasource_name: postgres_silver_datasource
+      data_connector_name: default_runtime_data_connector
+      data_asset_name: silver_orders
+      runtime_parameters:
+        query: "SELECT * FROM staging.orders LIMIT 100000"
+      batch_identifiers:
+        batch_id: silver_orders_batch
+    expectation_suite_name: silver_orders_suite
+action_list:
+  - name: store_validation_result
+    action:
+      class_name: StoreValidationResultAction
+  - name: update_data_docs
+    action:
+      class_name: UpdateDataDocsAction

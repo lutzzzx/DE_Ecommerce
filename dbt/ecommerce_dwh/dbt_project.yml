@@ -1,0 +1,16 @@
+name: 'ecommerce_dwh'
+version: '1.0.0'
+config-version: 2
+profile: 'ecommerce_dwh'
+
+model-paths: ["models"]
+test-paths: ["tests"]
+
+models:
+  ecommerce_dwh:
+    staging:
+      +materialized: view
+      +schema: staging_dbt
+    marts:
+      +materialized: table
+      +schema: analytics
